@@ -27,7 +27,12 @@ Grok API (xAI) を使用し、リアルタイムに生成されるユニーク�
 
 ### 2. インストール
 
-ダウンロードしてプロジェクトディレクトリに移動します。
+リポジトリをクローンしてプロジェクトディレクトリに移動します。
+
+```bash
+git clone https://github.com/yuki-dev26/grok-battle.git
+cd grok-battle
+```
 
 #### uv を使用する場合（推奨）
 
