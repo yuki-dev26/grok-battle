@@ -5,6 +5,10 @@
 **AI Les-Battle Game** は、生成 AI が演じる個性的なキャラクターと「レスバ（論争）」を楽しむことができる Web アプリケーションです。
 Grok API (xAI) を使用し、リアルタイムに生成されるユニークな対戦相手と、白熱した議論を交わすことができます。
 
+> [!TIP]
+> 本プロジェクトは、[こちらの記事](https://note.com/yuki_tech/n/n63b60729d801)で紹介されているデモシステムです。
+> 詳しい開発背景や技術解説については記事をご覧ください。
+
 ## 主な機能
 
 - **無限の議論テーマ**: 「きのこ派 vs たけのこ派」のような定番から、AI が生成するユニークなテーマ、さらにはユーザー自身が設定したテーマまで、あらゆる話題で議論できます。
@@ -46,16 +50,16 @@ powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
 uv sync
 
 # 仮想環境のアクティベート
-# Windows (PowerShell)
 .venv\Scripts\activate
 ```
 
 #### pip を使用する場合
 
 ```bash
-# 仮想環境の作成とアクティベート
+# 仮想環境の作成
 python -m venv .venv
 
+# アクティベート
 .venv\Scripts\activate
 
 # 依存関係のインストール
