@@ -1,0 +1,3 @@
+flask
+xai-sdk
+python-dotenv

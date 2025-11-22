@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AIレスババトル</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Noto+Sans+JP:wght@400;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+  <body>
+    {% if state == 'select_stance' %}
+    <div class="stance-selection-container">
+      <h1>BATTLE PREPARATION</h1>
+      <div class="topic-display">
+        <div class="topic-label">THEME</div>
+        <div class="topic-content">{{ topic_data.topic }}</div>
+      </div>
+      <h2>CHOOSE YOUR STANCE</h2>
+      <div class="stance-options">
+        {% for option in topic_data.options %}
+        <button
+          type="button"
+          class="stance-btn"
+          onclick="selectStance(this, '{{ option }}')"
+        >
+          {{ option }}
+        </button>
+        {% endfor %}
+      </div>
+      <button
+        class="reset-topic-btn"
+        onclick="window.location.href='/?reset=true'"
+      >
+        ↻ Change Topic
+      </button>
+
+      <!-- カスタムトピック入力エリア -->
+      <div class="custom-topic-area">
+        <input
+          type="text"
+          id="customTopicInput"
+          placeholder="Or enter your own topic..."
+          autocomplete="off"
+        />
+        <button class="custom-topic-btn" onclick="setCustomTopic(this)">
+          GO
+        </button>
+      </div>
+    </div>
+    <script>
+      async function setCustomTopic(btn) {
+        const input = document.getElementById("customTopicInput");
+        const topic = input.value.trim();
+        if (!topic) return;
+
+        btn.disabled = true;
+        btn.innerText = "...";
+        input.disabled = true;
+
+        try {
+          await fetch("/api/set_custom_topic", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ topic: topic }),
+          });
+          // ルートへ遷移（リセットフラグなし）して、設定したトピックを表示
+          window.location.href = "/";
+        } catch (e) {
+          console.error(e);
+          alert("エラーが発生しました");
+          btn.disabled = false;
+          btn.innerText = "GO";
+          input.disabled = false;
+        }
+      }
+
+      async function selectStance(btn, stance) {
+        // ローディング表示
+        btn.disabled = true;
+        const originalText = btn.innerText;
+        btn.innerText = "Loading...";
+        document
+          .querySelectorAll(".stance-btn")
+          .forEach((b) => (b.disabled = true));
+
+        try {
+          const response = await fetch("/start_battle", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ stance: stance }),
+          });
+          const data = await response.json();
+          if (data.redirect) {
+            window.location.href = data.redirect;
+          }
+        } catch (e) {
+          console.error(e);
+          alert("エラーが発生しました");
+          // エラー時はボタンを元に戻す
+          btn.disabled = false;
+          btn.innerText = originalText;
+          document
+            .querySelectorAll(".stance-btn")
+            .forEach((b) => (b.disabled = false));
+        }
+      }
+    </script>
+    {% else %}
+    <div class="battle-container">
+      <!-- ヘッダー / VS表示 -->
+      <header class="battle-header">
+        <div class="fighter user">
+          <div class="avatar">YOU</div>
+          <div class="name">あなた</div>
+          <div class="stance-badge user">
+            {{ session.get('user_stance', 'UNKNOWN') }}
+          </div>
+        </div>
+        <div class="vs-container">
+          <div class="topic-badge">TOPIC</div>
+          <div class="topic-text">{{ opponent.topic }}</div>
+          <div class="vs">VS</div>
+        </div>
+        <div class="fighter opponent">
+          <div class="avatar">CPU</div>
+          <div class="name">{{ opponent.name }}</div>
+          <div class="title">{{ opponent.title }}</div>
+          <div class="stance-badge opponent">{{ opponent.stance }}</div>
+        </div>
+      </header>
+
+      <!-- 優勢メーター -->
+      <div class="gauge-container">
+        <div class="gauge-label user">YOU</div>
+        <div class="gauge-bar-wrapper">
+          <div id="gaugeBar" class="gauge-bar" style="width: 50%"></div>
+          <div class="gauge-center"></div>
+        </div>
+        <div class="gauge-label opponent">ENEMY</div>
+      </div>
+      <div id="judgeComment" class="judge-comment">BATTLE START!</div>
+
+      <!-- チャットエリア -->
+      <div id="chatArea" class="chat-area">
+        <div class="message opponent">
+          <div class="bubble">{{ opponent.first_message }}</div>
+        </div>
+      </div>
+
+      <!-- 入力エリア -->
+      <div class="input-area">
+        <input
+          type="text"
+          id="messageInput"
+          placeholder="論破してやる..."
+          autocomplete="off"
+        />
+        <button id="sendBtn">FIRE!</button>
+      </div>
+
+      <!-- バトル画面からのテーマ変更ボタン -->
+      <div class="battle-footer">
+        <button
+          class="reset-topic-btn-small"
+          onclick="window.location.href='/?reset=true'"
+        >
+          ↻ Change Topic
+        </button>
+      </div>
+    </div>
+
+    <script id="opponent-data" type="application/json">
+      {{ opponent|tojson|safe }}
+    </script>
+    <script>
+      var opponent = JSON.parse(
+        document.getElementById("opponent-data").textContent
+      );
+    </script>
+    <script src="{{ url_for('static', filename='js/game.js') }}"></script>
+    {% endif %}
+  </body>
+</html>

@@ -1,0 +1,584 @@
+:root {
+  --user-color: #3b82f6;
+  --enemy-color: #ef4444;
+  --bg-color: #1a1a1a;
+  --text-color: #ffffff;
+  --chat-bg: rgba(0, 0, 0, 0.5);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Noto Sans JP", sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  height: 100vh;
+  overflow: hidden;
+  background-image: radial-gradient(circle at center, #2a2a2a 0%, #000000 100%);
+}
+
+.battle-container {
+  max-width: 800px;
+  margin: 0 auto;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+/* ヘッダー */
+.battle-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+  text-transform: uppercase;
+}
+
+.fighter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.fighter .avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Black Ops One", cursive;
+  font-size: 1.2rem;
+  border: 4px solid;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+  text-align: center;
+  line-height: 1;
+}
+
+.fighter.user .avatar {
+  border-color: var(--user-color);
+  background: rgba(59, 130, 246, 0.2);
+  color: var(--user-color);
+}
+
+.fighter.opponent .avatar {
+  border-color: var(--enemy-color);
+  background: rgba(239, 68, 68, 0.2);
+  color: var(--enemy-color);
+}
+
+.fighter .name {
+  font-weight: 900;
+  font-size: 1rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  text-align: center;
+  max-width: 120px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fighter .title {
+  font-size: 0.8rem;
+  color: #aaa;
+}
+
+.vs-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  margin: 0 20px;
+  min-width: 200px;
+}
+
+.topic-badge {
+  background: #fbbf24;
+  color: #000;
+  font-weight: bold;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  margin-bottom: 5px;
+}
+
+.topic-text {
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
+  color: #fff;
+  margin-bottom: 5px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  max-width: 100%;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.vs {
+  font-family: "Black Ops One", cursive;
+  font-size: 2.5rem;
+  color: #fbbf24;
+  text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+  animation: pulse 2s infinite;
+}
+
+/* 立ち位置選択画面 */
+.stance-selection-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  padding: 20px;
+  text-align: center;
+}
+
+.stance-selection-container h1 {
+  font-family: "Black Ops One", cursive;
+  font-size: 3rem;
+  margin-bottom: 30px;
+  color: #fbbf24;
+  text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+}
+
+.topic-display {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 20px 40px;
+  border-radius: 15px;
+  border: 2px solid #444;
+  margin-bottom: 40px;
+  min-width: 300px;
+}
+
+.topic-label {
+  font-size: 0.9rem;
+  color: #aaa;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.topic-content {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.stance-options {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.stance-btn {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: white;
+  font-size: 1.2rem;
+  padding: 20px 50px;
+  border-radius: 15px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 6px rgba(59, 130, 246, 0.3);
+  min-width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.stance-btn::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(rgba(255, 255, 255, 0.2), transparent);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.stance-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px rgba(59, 130, 246, 0.4);
+}
+
+.stance-btn:hover::after {
+  opacity: 1;
+}
+
+.stance-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+}
+
+.stance-btn:nth-child(2) {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  box-shadow: 0 4px 6px rgba(239, 68, 68, 0.3);
+}
+
+.stance-btn:nth-child(2):hover {
+  box-shadow: 0 8px 15px rgba(239, 68, 68, 0.4);
+}
+
+.stance-btn:nth-child(2):active {
+  box-shadow: 0 2px 4px rgba(239, 68, 68, 0.3);
+}
+
+.reset-topic-btn {
+  margin-top: 30px;
+  background: transparent;
+  border: 1px solid #666;
+  color: #aaa;
+  padding: 8px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.reset-topic-btn:hover {
+  border-color: #fff;
+  color: #fff;
+}
+
+.stance-badge.user {
+  background: var(--user-color);
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  margin-top: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.stance-badge.opponent {
+  background: var(--enemy-color);
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  margin-top: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* カスタムトピック入力エリア */
+.custom-topic-area {
+  margin-top: 30px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  width: 100%;
+  max-width: 400px;
+}
+
+.custom-topic-area input {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid #666;
+  border-radius: 20px;
+  padding: 10px 20px;
+  color: #fff;
+  font-size: 0.9rem;
+  width: 100%;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.custom-topic-area input:focus {
+  border-color: #3b82f6;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.custom-topic-btn {
+  background: #3b82f6;
+  border: none;
+  color: white;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  font-family: "Black Ops One", cursive;
+  font-size: 1rem;
+  transition: all 0.2s;
+}
+
+.custom-topic-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(59, 130, 246, 0.4);
+}
+
+.custom-topic-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.gauge-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 10px;
+}
+
+.gauge-label {
+  font-family: "Black Ops One", cursive;
+  width: 60px;
+  text-align: center;
+}
+
+.gauge-label.user {
+  color: var(--user-color);
+}
+.gauge-label.opponent {
+  color: var(--enemy-color);
+}
+
+.gauge-bar-wrapper {
+  flex: 1;
+  height: 30px;
+  background: var(--enemy-color);
+  border-radius: 15px;
+  overflow: hidden;
+  position: relative;
+  border: 2px solid #444;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.gauge-bar {
+  height: 100%;
+  background: var(--user-color);
+  width: 50%;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  box-shadow: 0 0 20px var(--user-color);
+}
+
+.gauge-bar::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: #fff;
+  box-shadow: 0 0 10px #fff;
+}
+
+.gauge-center {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.5);
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+.judge-comment {
+  text-align: center;
+  min-height: 24px;
+  color: #fbbf24;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+/* チャットエリア */
+.chat-area {
+  flex: 1;
+  background: var(--chat-bg);
+  border-radius: 10px;
+  padding: 20px;
+  overflow-y: auto;
+  margin-bottom: 20px;
+  border: 1px solid #333;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.message {
+  display: flex;
+  max-width: 80%;
+  animation: slideIn 0.3s ease-out;
+}
+
+.message.user {
+  align-self: flex-start;
+}
+
+.message.opponent {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+.message .bubble {
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 1rem;
+  line-height: 1.5;
+  position: relative;
+  word-wrap: break-word;
+  max-width: 100%;
+}
+
+.message.user .bubble {
+  background: rgba(59, 130, 246, 0.2);
+  border: 1px solid var(--user-color);
+  border-top-left-radius: 0;
+  color: #fff;
+}
+
+.message.opponent .bubble {
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid var(--enemy-color);
+  border-top-right-radius: 0;
+  color: #fff;
+}
+
+/* 入力エリア */
+.input-area {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  background: #2a2a2a;
+  border-radius: 50px;
+  border: 1px solid #444;
+}
+
+input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 1.1rem;
+  padding: 10px 20px;
+  outline: none;
+}
+
+button {
+  background: linear-gradient(135deg, #fbbf24, #d97706);
+  border: none;
+  color: #000;
+  font-family: "Black Ops One", cursive;
+  font-size: 1.2rem;
+  padding: 10px 30px;
+  border-radius: 40px;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+button:active {
+  transform: scale(0.95);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.reset-topic-btn-small {
+  background: transparent;
+  border: 1px solid #666;
+  color: #aaa;
+  padding: 6px 15px;
+  border-radius: 15px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: all 0.2s;
+}
+
+.reset-topic-btn-small:hover {
+  border-color: #fff;
+  color: #fff;
+}
+
+.battle-footer {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 600px) {
+  .battle-container {
+    padding: 10px;
+  }
+
+  .battle-header {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .fighter {
+    transform: scale(0.8);
+  }
+
+  .vs-container {
+    order: -1;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .vs {
+    font-size: 2rem;
+  }
+
+  .gauge-container {
+    gap: 5px;
+  }
+
+  .gauge-label {
+    width: 40px;
+    font-size: 0.8rem;
+  }
+
+  .input-area {
+    padding: 5px;
+  }
+
+  button {
+    padding: 8px 15px;
+    font-size: 1rem;
+  }
+}

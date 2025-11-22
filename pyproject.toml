@@ -1,0 +1,16 @@
+[project]
+name = "grok-demo"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "xai-sdk>=1.4.0",
+    "flask>=3.0.0",
+    "flask-socketio>=5.3.6",
+    "python-socketio>=5.8.0",
+    "python-engineio>=4.7.1",
+    "apscheduler>=3.10.4",
+    "pillow>=10.0.0",
+    "python-dotenv>=1.2.1",
+]
