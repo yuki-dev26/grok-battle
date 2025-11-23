@@ -1,8 +1,8 @@
-# AI Les-Battle Game
+# Grok Les-Battle Game
 
 ## 概要
 
-**AI Les-Battle Game** は、生成 AI が演じる個性的なキャラクターと「レスバ（論争）」を楽しむことができる Web アプリケーションです。
+**Grok Les-Battle Game** は、生成 AI が演じる個性的なキャラクターと「レスバ（口論）」を楽しむことができる Web アプリケーションです。
 Grok API (xAI) を使用し、リアルタイムに生成されるユニークな対戦相手と、白熱した議論を交わすことができます。
 
 > [!TIP]
@@ -44,13 +44,7 @@ cd grok-battle
 
 ```bash
 # uv インストール方法(Windows)
-powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
-
-# 依存関係のインストール
-uv sync
-
-# 仮想環境のアクティベート
-.venv\Scripts\activate
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
 ```
 
 #### pip を使用する場合
